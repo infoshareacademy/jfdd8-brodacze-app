@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import moment from 'moment'
 import firebase from 'firebase'
+import './List.css'
+import trashIcon from './img/bin.png'
 
 class List extends Component {
 
@@ -104,22 +106,22 @@ class List extends Component {
 
     return (
         <div className="col-md-6 lista" style={{"overflow-y":"scroll"}}>
-        <p>Set your incomings and outgoings</p>
+        <h3>Set your incomings and outgoings</h3>
 
         <form onSubmit={this.handleSubmit}>
-          <input
+          <input className={"val"}
             value={this.state.taskInputValue}
             onChange={this.handleChange}
           />
-          <button>Add</button>
+          <button className={"add"}>Add</button>
           <p>{this.state.error}</p>
-          <div>
+          <div className={"input"}>
             <label>
               <input type="radio" name="digits"
                      onChange={this.handleIncomeInputChange}
                      checked={this.state.incomeChecked}
 
-              /> + Incomings:
+              /> Incomings ( + )
             </label>
             <label>
               <input type="radio" name="Outgoings"
@@ -127,15 +129,19 @@ class List extends Component {
                      checked={this.state.outcomeChecked}
 
 
-              /> - Outgoings:
+              /> Outgoings ( - )
             </label>
           </div>
 
-          Division:
-          <select name="Outgoings" onChange={this.handleOption}>
-            <option value="" disabled selected>- here choose category -</option>
-            {this.state.options.map(option => <option>{option}</option>)}
-          </select>
+          <div className={"category"}>
+              Division:
+              <select name="Outgoings" onChange={this.handleOption}>
+                  <option value="" disabled selected>- here choose category -</option>
+                  {this.state.options.map(option => <option>{option}</option>)}
+              </select>
+          </div>
+
+
         </form>
 
         <table>
@@ -149,16 +155,18 @@ class List extends Component {
             this.state.tasks.map(
               task => (
                 <tr>
-                  <td key={task.id}>
+                  <td className={"money"} key={task.id}>
                     {task.isOutcome === true && ' -'}
                     {(+task.content).toFixed(2)}
                   </td>
                   <td> {task.isIncome === true && ' Earnings '} {task.category}</td>
-                  <td>{moment(task.date).format('DD MM YYYY')}</td>
-                  <button data-task-id={task.id}
-                          onClick={this.handleDeleteClick}>
-                    Delete
-                  </button>
+                  <td>{moment(task.date).format('DD-MM-YYYY')}
+                      <img className={"trash"}
+                           src={trashIcon}
+                           data-task-id={task.id}
+                           onClick={this.handleDeleteClick}
+                      />
+                  </td>
                 </tr>
               )
             )
